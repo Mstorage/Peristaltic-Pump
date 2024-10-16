@@ -1,0 +1,27 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "Keil: 生成工程",
+			"command": "C:\\Keil_v5\\UV4\\UV4.exe",
+			"args": [
+				"-b",
+				"${workspaceFolder}\\MDK-ARM\\LinearCCD.uvprojx",
+				"-j0",
+				"-t",
+				"CCD_Test",
+				"-o",
+				"${workspaceFolder}\\.vscode\\uv4.log"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": "build",
+			"detail": "编译器: UV4.exe"
+		}
+	]
+}

@@ -1,0 +1,28 @@
+{
+    "files.associations": {
+        "usart.h": "c",
+        "usb_device.h": "c",
+        "marlin_functions.h": "c",
+        "stm32f4xx_hal.h": "c",
+        "config.h": "c",
+        "stepdriver.h": "c",
+        "delay.h": "c",
+        "*.disable": "c",
+        "ssd1306.h": "c",
+        "gpio.h": "c",
+        "main.h": "c",
+        "fontoutput_lut.h": "c",
+        "stm32f1xx_hal.h": "c",
+        "tim.h": "c",
+        "stdio.h": "c",
+        "spi.h": "c",
+        "oled.h": "c",
+        "oledfont.h": "c",
+        "adc.h": "c",
+        "oled_spi.h": "c",
+        "stm32f1xx_hal_conf.h": "c",
+        "stm32f1xx_hal_rcc.h": "c",
+        "stm32f1xx_hal_def.h": "c",
+        "stm32f1xx.h": "c"
+    }
+}

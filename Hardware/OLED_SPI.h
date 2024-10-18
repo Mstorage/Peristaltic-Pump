@@ -10,8 +10,8 @@
 
 #define OLED_I2C_ADDRESS 0x78
 
-#define NUM_SIZE_8X6 8
-#define NUM_SIZE_16X8 16
+#define FONT_SIZE_8X6 8
+#define FONT_SIZE_16X8 16
 
 #define OLED_DC_Clr() HAL_GPIO_WritePin(OLED_DC_GPIO_Port,OLED_DC_Pin,GPIO_PIN_RESET)//DC=0->CMD
 #define OLED_DC_Set() HAL_GPIO_WritePin(OLED_DC_GPIO_Port,OLED_DC_Pin,GPIO_PIN_SET)//DC=1->DATA
@@ -50,6 +50,8 @@ void OLED_GRAMShowImage(uint8_t x_start, uint8_t y_start, uint8_t width, uint8_t
 void OLED_GRAMClearArea(uint8_t x_start, uint8_t y_start, uint8_t width, uint8_t heigh);
 void OLED_GRAM_WritePoint(uint8_t point_x,uint8_t point_y);
 void OLED_GRAM_ShowNum(uint8_t x_start, uint8_t y_start, uint32_t Number, uint8_t Length, uint8_t FontSize, uint8_t gap);
+void OLED_GRAM_ShowString(uint8_t x_start, uint8_t y_start, uint8_t Fontsize, char *String);
+void OLED_GRAM_Printf(uint8_t X, uint8_t Y, uint8_t FontSize, char *format, ...);
 
 extern unsigned char GRAM[SCREEN_HEIGHT / PAGE_HEIGHT][SCREEN_WIDTH];
 

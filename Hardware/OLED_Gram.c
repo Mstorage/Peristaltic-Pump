@@ -1,6 +1,8 @@
 #include "OLED_SPI.h"
 #include "oledfont.h"
 #include "usart.h"
+#include <stdarg.h>
+#include <string.h>
 
 unsigned char GRAM[SCREEN_HEIGHT / PAGE_HEIGHT][SCREEN_WIDTH] = {0};
 
@@ -124,7 +126,7 @@ void OLED_GRAM_WritePoint(uint8_t point_x,uint8_t point_y)
 {
 	uint8_t point_page = point_y / 8;
 	uint8_t point_pixle = point_y % 8;
-	GRAM[point_page][point_x] | (0x01<<point_pixle);
+	GRAM[point_page][point_x] || (0x01<<point_pixle);
 }
 
 
@@ -154,9 +156,9 @@ void OLED_GRAM_ShowChar(uint8_t X, uint8_t Y, char Char, uint8_t FontSize)
 
 /**
   * @brief  在任意位置加载数字
-  * @param  x:加载字符串的起始横坐标（0-128）;
-  * @param	y:加载字符串的起始纵坐标（0-64）;
-  * @param	chr:想要加载的字符串地址；
+  * @param  x:加载数字的起始横坐标（0-128）;
+  * @param	y:加载数字串的起始纵坐标（0-64）;
+  * @param	chr:想要加载的数字地址；
   * @param	Char_Size:字符尺寸（8 / 16）;
 
   * @retval none
@@ -173,4 +175,66 @@ void OLED_GRAM_ShowNum(uint8_t x_start, uint8_t y_start, uint32_t Number, uint8_
 		/*+ '0' 可将数字转换为字符格式*/
 		OLED_GRAM_ShowChar(x_start + i * gap, y_start, number_i + '0', FontSize);
 	}
+}
+
+/**
+  * @brief  在任意位置加载字符串
+  * @param  x:加载字符串的起始横坐标（0-128）;
+  * @param	y:加载字符串的起始纵坐标（0-64）;
+  * @param	chr:想要加载的字符串地址；
+  * @param	Char_Size:字符尺寸（8 / 16）;
+
+  * @retval none
+ */
+void OLED_GRAM_ShowString(uint8_t x_start, uint8_t y_start, uint8_t Fontsize, char *String)
+{
+    uint8_t i = 0;
+    uint8_t x_index = x_start;
+    uint8_t y_index = y_start;
+    // uint8_t page_index = y_start / 8;
+    uint8_t fontsize_width = (Fontsize == 8) ? 6 : 8;
+    while(String[i] != '\0')
+    {
+        if(String[i] == '\n')
+        {
+            y_index += Fontsize;
+            x_index = 0;
+            i++;
+        }
+        if(x_index + fontsize_width > 128)
+        {
+            y_index += Fontsize;
+            x_index = 0;
+            i++;
+        }
+        if(String[i] > '~')
+        {
+            printf("no Chinese now\n");
+        }else{
+            OLED_GRAM_ShowChar(x_index, y_index, String[i], Fontsize);
+            i++;
+            x_index += fontsize_width;
+        }
+
+
+    }
+}
+
+/**
+  * @brief  在任意位置加载字符串
+  * @param  x:加载字符串的起始横坐标（0-128）;
+  * @param	y:加载字符串的起始纵坐标（0-64）;
+  * @param	chr:想要加载的字符串地址；
+  * @param	Char_Size:字符尺寸（8 / 16）;
+
+  * @retval none
+ */
+void OLED_GRAM_Printf(uint8_t X, uint8_t Y, uint8_t FontSize, char *format, ...)
+{
+	char String[30];						//定义字符数组
+	va_list arg;							//定义可变参数列表数据类型的变量arg
+	va_start(arg, format);					//从format开始，接收参数列表到arg变量
+	vsprintf(String, format, arg);			//使用vsprintf打印格式化字符串和参数列表到字符数组中
+	va_end(arg);							//结束变量arg
+	OLED_GRAM_ShowString(X, Y, FontSize, String);//OLED显示字符数组（字符串）
 }

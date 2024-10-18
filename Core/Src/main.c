@@ -117,8 +117,9 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);			//启用TIM1的CH1通道来输出控制步进电机的50%占空比的PWM信号
 	HAL_ADC_Start_DMA(&hadc1,(uint32_t*)AdcBuf, ADC_BUF_LENGTH);	//启用adc1的DMA传输
 
-  OLED_GRAM_ShowNum(10, 10, 1234, 4, NUM_SIZE_16X8, 8);
-	OLED_GRAM_ShowChar(50,32,'B',16);
+  OLED_GRAM_ShowNum(10, 10, 1234, 4, FONT_SIZE_16X8, 8);
+	OLED_GRAM_Printf(30, 25, FONT_SIZE_16X8, "ABC%d", 123);
+	//OLED_GRAM_ShowString(30, 25, "ABC", FONT_SIZE_16X8);
 	
   for (uint8_t i = 0; i < 2; i++)
     {
@@ -159,7 +160,7 @@ int main(void)
     */
 		OLED_GRAMLODING();	
 		   //OLED_GRAMLODING();
-		OLED_ShowString(2,4,"ABC",8);
+		//OLED_ShowString(2,4,"ABC",8);
 
     /* USER CODE BEGIN 3 */
   }

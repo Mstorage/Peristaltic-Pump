@@ -2,6 +2,9 @@
 #define _OLED_SPI_H_
 #include "stm32f1xx_hal.h"
 
+#include <stdarg.h>
+#include <string.h>
+
 #define Max_Column 128
 #define Max_Row 64
 

@@ -1,8 +1,6 @@
 #include "OLED_SPI.h"
 #include "oledfont.h"
 #include "usart.h"
-#include <stdarg.h>
-#include <string.h>
 
 unsigned char GRAM[SCREEN_HEIGHT / PAGE_HEIGHT][SCREEN_WIDTH] = {0};
 
@@ -121,12 +119,15 @@ void OLED_GRAM_ReversArea(uint8_t x_start, uint8_t y_start, uint8_t width, uint8
   * @param	y:加载点的起始纵坐标（0-64）;
   * @retval none
  */
-
 void OLED_GRAM_WritePoint(uint8_t point_x,uint8_t point_y)
 {
+    /*参数检查，保证指定位置不会超出屏幕范围*/
+	if (point_x > 127) {return;}
+	if (point_y > 63) {return;}
+
 	uint8_t point_page = point_y / 8;
 	uint8_t point_pixle = point_y % 8;
-	GRAM[point_page][point_x] || (0x01<<point_pixle);
+	GRAM[point_page][point_x] |= (0x01 << point_pixle);
 }
 
 

@@ -32,6 +32,9 @@
 "pump_peristaltic_opensource\flash_w25q.o"
 "pump_peristaltic_opensource\oled_gram.o"
 "pump_peristaltic_opensource\oled_date.o"
+"pump_peristaltic_opensource\key.o"
+"pump_peristaltic_opensource\menu.o"
+"pump_peristaltic_opensource\ui.o"
 --library_type=microlib --strict --scatter "Pump_Peristaltic_OpenSource\Pump_Peristaltic_OpenSource.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

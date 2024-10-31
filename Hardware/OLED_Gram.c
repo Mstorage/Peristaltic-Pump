@@ -24,6 +24,24 @@ void OLED_GRAMLODING(void)
 }
 
 /**
+  * @brief  清空所有显存;
+  * @retval none
+ */
+void OLED_GRAMCLEAR(void)
+{
+	uint8_t page = 0;
+	uint8_t colume = 0;
+	
+	for (page = 0; page < 8; page++)
+	{
+		for (colume = 0; colume < 128; colume++)
+		{
+            GRAM[page][colume] = 0;
+		}
+	}
+}
+
+/**
   * @brief  在目标区域清屏后显示位图;
   * @param  x_start:开始显示的x坐标;
   * @param	y_start:开始显示的y坐标;

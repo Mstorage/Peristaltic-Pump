@@ -4,8 +4,8 @@
 
 #include "stm32f1xx_hal.h"
 
-#define Right 0
-#define Left 1
+#define RIGHT 0
+#define LEFT 1
 
 #define MOTOR_OK 1
 #define MOTOR_BUSY 0

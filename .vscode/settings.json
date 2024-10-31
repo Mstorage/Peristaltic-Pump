@@ -24,6 +24,7 @@
         "stm32f1xx_hal_rcc.h": "c",
         "stm32f1xx_hal_def.h": "c",
         "stm32f1xx.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "key.h": "c"
     }
 }

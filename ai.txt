@@ -1,0 +1,14 @@
+我目前在使用keil进行STM32的开发，当前我的系统中需要读取一个旋转编码器产生的左转右转信号以及另一个按钮的确认信号。
+当前我采用的办法是单独将按键读取分离成一个Key.c文件，使用struct 
+{
+	uint8_t Enter;	//确认键
+	uint8_t Left;	//左
+	uint8_t Right;	//右
+} Key;结构体来记录同样位于Key.c中的中断回调函数HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+中读取的中断信号，因为防抖的需要我在回调函数中我使用if(GPIO_Pin == Model_SW_Pin)
+	{
+        __HAL_TIM_CLEAR_IT(&htim3, TIM_IT_UPDATE);
+	    HAL_TIM_Base_Start_IT(&htim3);		//打开TIM3定时器中断
+		printf("Flag=1\n");
+	}语句来打开定时器3控制一个20ms的延时再进入定时器中断中判断按键是否仍然被按下，这样可以消除机械按键的抖动。
+但是这样就引入了一个问题，我的time定时器回调函数HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)写在了main.c中，并且在该函数中所处理的中断不只有tim3一个，还有用于控制ADC采样的tim2的控制语句也在其中，我使用if(htim == &htim2)或者if(htim == &htim3)来判断中断是来自于那个定时器。这样的话我就只能在main.c中判断按钮是否还在持续的被按下，这种情况下不利于代码的后期维护与移植，请问我如何在使用定时器中断消除按钮抖动的情况下将按键部分的代码全部都封装到Key.c中，通过判断结构体Key.Enter的值来判断确认按钮是否被按下呢？

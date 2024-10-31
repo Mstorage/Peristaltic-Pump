@@ -31,6 +31,8 @@ pump_peristaltic_opensource\oled_spi.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm3
 pump_peristaltic_opensource\oled_spi.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 pump_peristaltic_opensource\oled_spi.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 pump_peristaltic_opensource\oled_spi.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
+pump_peristaltic_opensource\oled_spi.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
+pump_peristaltic_opensource\oled_spi.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 pump_peristaltic_opensource\oled_spi.o: ..\Hardware\oledfont.h
 pump_peristaltic_opensource\oled_spi.o: ../Core/Inc/spi.h
 pump_peristaltic_opensource\oled_spi.o: ../Core/Inc/main.h

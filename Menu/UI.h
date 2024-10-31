@@ -8,5 +8,4 @@ void UI_RunTimeSwitch(void);
 void UI_CurrentMonitor(void);
 void UI_Information(void);
 
-
 #endif

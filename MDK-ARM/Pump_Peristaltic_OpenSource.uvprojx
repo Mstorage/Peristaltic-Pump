@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Hardware</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;..\Hardware;..\Menu</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -594,6 +594,36 @@
               <FileName>OLED_DATE.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Hardware\OLED_DATE.c</FilePath>
+            </File>
+            <File>
+              <FileName>Key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Hardware\Key.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Menu</GroupName>
+          <Files>
+            <File>
+              <FileName>menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Menu\menu.c</FilePath>
+            </File>
+            <File>
+              <FileName>menu.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Menu\menu.h</FilePath>
+            </File>
+            <File>
+              <FileName>UI.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Menu\UI.c</FilePath>
+            </File>
+            <File>
+              <FileName>UI.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\Menu\UI.h</FilePath>
             </File>
           </Files>
         </Group>

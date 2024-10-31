@@ -91,15 +91,11 @@ void Error_Handler(void);
 #define OLED_RST_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-#define Automatic 0
-#define Manual 1
-#define ADC_BUF_LENGTH 100
-#define MODEL_INTERRUPT 0x01
-#define ENCODER_INTERRUPT 0x02
 
-#define SPEED (((10000 / (PSC_Speed + 1)) * 1.8) / 360) * 15 // 通过TIM的PSC值来计算出当前泵的流速
-#define IS_ENCODER_DT_SET (HAL_GPIO_ReadPin(Encoder_DT_GPIO_Port, Encoder_DT_Pin))
-#define IS_Model_SW_SET HAL_GPIO_ReadPin(Model_SW_GPIO_Port, Model_SW_Pin)
+#define ADC_BUF_LENGTH 100
+
+
+#define SPEED (((10000 / (PSC_Speed + 1)) * 1.8) / 360) * 15 // 通过TIM的PSC值来计算出当前泵的流�?
 
 /* USER CODE END Private defines */
 

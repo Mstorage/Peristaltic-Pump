@@ -46,6 +46,7 @@ void OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no);
 void OLED_ShowString(uint8_t x,uint8_t y,uint8_t*chr,uint8_t Char_Size);
 
 void OLED_GRAMLODING(void);
+void OLED_GRAMCLEAR(void);
 void OLED_GRAM_ReversArea(uint8_t x_start, uint8_t y_start, uint8_t width, uint8_t height);
 void OLED_GRAM_ShowChar(uint8_t X, uint8_t Y, char Char, uint8_t FontSize);
 void OLED_GRAM_WritePoint(uint8_t point_x,uint8_t point_y);

@@ -30,6 +30,8 @@
 #include "motor.h"
 #include "OLED_SPI.h"
 #include "Flash_W25Q.h"
+#include "Key.h"
+#include "menu.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,10 +52,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-uint8_t PSC_Speed = 9;						//定义PSC
 unsigned int Speed = 0;
-uint8_t Flag_SW = 0;     //用于判断使那个引脚的中断触发了定时器按键防抖中断
-uint8_t Model_MP = 0;				//切换手动和自动
+
 uint16_t AdcBuf[ADC_BUF_LENGTH] = {0};
 /* USER CODE END PV */
 
@@ -141,6 +141,9 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
+    MENU_RunMainMenu();
+    
+    		
     /*
 	  OLED_DrawBMP(0, 0, 128, 8, BMP1);
 	  HAL_Delay(100);
@@ -159,8 +162,7 @@ int main(void)
 	  OLED_DrawBMP(0, 0, 128, 8, BMP8);
 	  HAL_Delay(100);
     */
-		OLED_GRAMLODING();	
-		   //OLED_GRAMLODING();
+		//OLED_GRAMLODING();
 		//OLED_ShowString(2,4,"ABC",8);
 
     /* USER CODE BEGIN 3 */
@@ -213,59 +215,7 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
-
 /* USER CODE BEGIN 4 */
-/**
-  * @brief  GPIO中断回调函数，用于处理按键和编码器事件;
-  * @param  GPIO_Pin：中断函数发送过来的中断引脚;
-  * @retval none;
-  */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
-{
-	if(GPIO_Pin == Model_SW_Pin)
-	{
-		Flag_SW = MODEL_INTERRUPT;
-		printf("Flag=1\n");
-		__HAL_TIM_CLEAR_IT(&htim3, TIM_IT_UPDATE);
-		HAL_TIM_Base_Start_IT(&htim3);		//打开TIM3定时器中断
-	}else if(GPIO_Pin == Encoder_CLK_Pin)
-	{
-		Flag_SW = ENCODER_INTERRUPT;
-    /**********自动模式下检测到顺时钟旋转编码器**********/
-		if(IS_ENCODER_DT_SET && (Model_MP == Automatic))
-    {
-			PSC_Speed += 1;
-      Motor_PWM_Output_Init(PSC_Speed);
-      HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-		OLED_ShowNum(36,0,SPEED,4,8);
-		OLED_ShowNum(36,1,PSC_Speed,4,8);
-			//OLED_ShowNum(4,1,AdcBuf_Average(AdcBuf),4,16);
-
-		/**********自动模式下检测到逆时钟旋转编码器**********/
-    }else if(!IS_ENCODER_DT_SET && (Model_MP == Automatic)){
-			PSC_Speed -= 1;
-      Motor_PWM_Output_Init(PSC_Speed);
-      HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-		OLED_ShowNum(36,0,SPEED,4,8);
-		OLED_ShowNum(36,1,PSC_Speed,4,8);
-			//OLED_ShowNum(1,4,AdcBuf_Average(AdcBuf),4,16);
-
-    /**********手动模式下检测到顺时钟旋转编码器**********/
-		}else if(! IS_ENCODER_DT_SET && (Model_MP == Manual)){
-      Motor_GPIO_Output_Init();
-			Motor_MultiStep(1, 0);
-
-    /**********手动模式下检测到逆时钟旋转编码器**********/
-		}else if(IS_ENCODER_DT_SET && (Model_MP == Manual)){
-      Motor_GPIO_Output_Init();
-			Motor_MultiStep(1, 1);	
-		}
-		if(PSC_Speed >= 0){
-		htim1.Instance->PSC = PSC_Speed;
-		}//修改电机定时器PWM波输出的PSC
- 		HAL_TIM_GenerateEvent(&htim1, TIM_EVENTSOURCE_UPDATE);	// 更新定时器的设置
-	}
-}
 
 /**
   * @brief  TIM定时器中断回调函数;
@@ -289,22 +239,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 		__HAL_TIM_SET_COUNTER(&htim3, 0);
 
 		printf("keyunshake_OK\n");
-		if(! IS_Model_SW_SET && Flag_SW == MODEL_INTERRUPT)
-		{
-			if(Model_MP == Automatic){
-
-        Model_MP = Manual;
-        Motor_GPIO_Output_Init();
-
-      }else if(Model_MP == Manual){
-
-        Model_MP = Automatic;
-        Motor_PWM_Output_Init(PSC_Speed);
-
-      }
-
-			OLED_ShowNum(1,3,Model_MP,1,16);
-		}
+	  Key_KeepPress();
   }
 }
 
@@ -363,3 +298,4 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
+

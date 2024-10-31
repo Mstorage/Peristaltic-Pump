@@ -32,8 +32,8 @@ void Motor_Step_L(void)
   */
 uint8_t Motor_MultiStep(unsigned int step, unsigned char direction)
 {
-	if(direction == Right){HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);}
-	else if(direction == Left){HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);}
+	if(direction == RIGHT){HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);}
+	else if(direction == LEFT){HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);}
 	for(int i = 0; i < step; i++)
 	{
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);

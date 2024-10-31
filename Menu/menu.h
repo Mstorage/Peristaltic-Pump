@@ -6,6 +6,7 @@
 #endif
 
 #include "UI.h"
+#include <stdint.h>
 
 typedef struct _MENU_OptionTypeDef // 选项结构体
 {
@@ -16,8 +17,8 @@ typedef struct _MENU_OptionTypeDef // 选项结构体
 /**********************************************************/
 enum _menu_command
 {
-    BUFFER_DISPLAY, // 无参无返
-    BUFFER_CLEAR,   // 无参无返
+    BUFFER_DISPLAY, // 无参无返, 显示显存中的内容
+    BUFFER_CLEAR,   // 无参无返, 清空屏幕
     SHOW_STRING,    // 可变参数列表对应顺序: x, y, string
     SHOW_CURSOR,    // 可变参数列表对应顺序: x, y, width, height;
 
@@ -27,7 +28,17 @@ enum _menu_command
     GET_EVENT_WHEEL,     // 返回有符号整型
 };
 
+int menu_command_callback(enum _menu_command command, ...);
+void MENU_RunMenu(MENU_OptionTypeDef *OptionList);
 
+int8_t Menu_Get_RollEvent(void);
+int8_t Menu_Get_EnterEvent(void);
+int8_t Menu_Get_BackEvent(void);
+
+void MENU_RunMainMenu(void);
+void MENU_RunSystemSetting(void);
+void MENU_RunDisplaySetting(void);
+void MENU_RunAnimation(void);
 
 #endif
 

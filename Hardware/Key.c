@@ -11,7 +11,7 @@ struct
 	uint8_t Back;	//返回键
 	uint8_t Left;	//左
 	uint8_t Right;	//右
-    uint8_t MF_AF;	//手自动切换
+  uint8_t MF_AF;	//手自动切换
 } Key;
 
 /**
@@ -24,6 +24,7 @@ int8_t Key_Enter_Get(void)	//确认键
 	if(Key.Enter)
 	{
 		Key.Enter = 0;
+    printf("11111111111111");
 		return 1;
 	}
 	return 0;
@@ -85,14 +86,21 @@ int8_t Key_MF_AF_Get(void)	//手动货自动键
 	return 0;
 }
 
-void Key_KeepPress(void)
+void Key_Keep(void)
 {
-    if(! IS_Model_SW_SET && Flag_SW == MODEL_INTERRUPT)
+    if(! IS_ENCODER_KEY_SET && Flag_SW == ENCODER_KEY_INTERRUPT)
 		{
             Key.Enter = 1;
+            Flag_SW = 0;
 			//OLED_ShowNum(1,3,Model_MP,1,16);
-		}else{
+		}else if(! IS_KEY_SET_SET && Flag_SW == KEY_SET_INTERRUPT)
+    {       
+            Key.Back = 1;
+            Flag_SW = 0;
+
+    }else{
             Key.Enter = 0;
+            Key.Back = 0;
         }
 }
 
@@ -104,16 +112,19 @@ void Key_KeepPress(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
     /**********自动模式下检测到顺时钟旋转编码器**********/
-	if(GPIO_Pin == Model_SW_Pin)
+	if(GPIO_Pin == Encoder_Key_Pin)//处理Encoder_Key
 	{
-		Flag_SW = MODEL_INTERRUPT;
-        __HAL_TIM_CLEAR_IT(&htim3, TIM_IT_UPDATE);
+		  Flag_SW = ENCODER_KEY_INTERRUPT;
+      __HAL_TIM_CLEAR_IT(&htim3, TIM_IT_UPDATE);
 	    HAL_TIM_Base_Start_IT(&htim3);		//打开TIM3定时器中断
-        Key.Enter = 1;
-		printf("Flag=1\n");
-	}
-    
-    else if(GPIO_Pin == Encoder_CLK_Pin)
+      printf("Enter\n");
+
+	}else if(GPIO_Pin == Key_set_Pin){//处理Key_set
+      Flag_SW = KEY_SET_INTERRUPT;
+      __HAL_TIM_CLEAR_IT(&htim3, TIM_IT_UPDATE);
+	    HAL_TIM_Base_Start_IT(&htim3);		//打开TIM3定时器中断
+
+  }else if(GPIO_Pin == Encoder_CLK_Pin)
 	{
 		Flag_SW = ENCODER_INTERRUPT;
     /**********自动模式下检测到顺时钟旋转编码器**********/
@@ -164,7 +175,11 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
             Motor_GPIO_Output_Init();
 			Motor_MultiStep(1, 1);	
             printf("left_MF\n");
-		}
+	}
+
+
+
+
 	// 	if(PSC_Speed >= 0){
 	// 	htim1.Instance->PSC = PSC_Speed;
 

@@ -65,10 +65,14 @@ void Error_Handler(void);
 #define Model_SW_Pin GPIO_PIN_2
 #define Model_SW_GPIO_Port GPIOA
 #define Model_SW_EXTI_IRQn EXTI2_IRQn
-#define Motor_Step_Pin GPIO_PIN_3
-#define Motor_Step_GPIO_Port GPIOA
+#define Key_set_Pin GPIO_PIN_3
+#define Key_set_GPIO_Port GPIOA
+#define Key_set_EXTI_IRQn EXTI3_IRQn
 #define Motor_Dir_Pin GPIO_PIN_4
 #define Motor_Dir_GPIO_Port GPIOA
+#define Encoder_Key_Pin GPIO_PIN_6
+#define Encoder_Key_GPIO_Port GPIOA
+#define Encoder_Key_EXTI_IRQn EXTI9_5_IRQn
 #define FLASH_CS_Pin GPIO_PIN_12
 #define FLASH_CS_GPIO_Port GPIOB
 #define FLASH_SCK_Pin GPIO_PIN_13
@@ -95,7 +99,7 @@ void Error_Handler(void);
 #define ADC_BUF_LENGTH 100
 
 
-#define SPEED (((10000 / (PSC_Speed + 1)) * 1.8) / 360) * 15 // 通过TIM的PSC值来计算出当前泵的流�?
+#define SPEED (((10000 / (PSC_Speed + 1)) * 1.8) / 360) * 15 // 通过TIM的PSC值来计算出当前泵的流�??
 
 /* USER CODE END Private defines */
 

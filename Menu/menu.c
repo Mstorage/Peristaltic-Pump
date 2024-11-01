@@ -37,8 +37,8 @@ int menu_command_callback(enum _menu_command command, ...)//...为show_X,show_y,
     case SHOW_STRING:
       va_list args;
       va_start(args, command);
-      uint8_t show_x = va_arg(args, int);
-      uint8_t show_y = va_arg(args, int);
+      int show_x = va_arg(args, int);
+      int show_y = va_arg(args, int);
       char *show_string = va_arg(args, char*);
       OLED_GRAM_Printf(show_x, show_y, FONT_SIZE_16X8, show_string);
       break;
@@ -46,11 +46,13 @@ int menu_command_callback(enum _menu_command command, ...)//...为show_X,show_y,
     case SHOW_CURSOR:
     {
         /* 提取参数列表 */
-        int *arg_list = ((int *)&command) + 1;
-        int cursor_x = arg_list[0];
-        int cursor_y = arg_list[1];
-        int cursor_width = arg_list[2];
-        int cursor_height = arg_list[3];
+
+        va_list args;
+        va_start(args, command);
+        int cursor_x = va_arg(args, int);
+        int cursor_y = va_arg(args, int);
+        int cursor_width = va_arg(args, int);
+        int cursor_height = va_arg(args, int);
 
         /* 按需使用参数 */
         OLED_GRAM_ReversArea(cursor_x, cursor_y, cursor_width, cursor_height);
@@ -63,7 +65,7 @@ int menu_command_callback(enum _menu_command command, ...)//...为show_X,show_y,
         break;
 
     case GET_EVENT_BACK:
-        retval = Menu_Get_EnterEvent();
+        retval = Menu_Get_BackEvent();
         break;
 
     case GET_EVENT_WHEEL:
@@ -88,11 +90,12 @@ void MENU_RunMenu(MENU_OptionTypeDef *OptionList)
     int8_t Cursor_i = 0;     // 光标下标默认为0, 屏幕中显示的第i条
     int8_t Show_i = 0;       // 显示(遍历)起始下标
     int8_t Wheel_Event = 0;  // 记录菜单滚动事件
-    int8_t Option_Max_i = -1; // 选项列表长度
-    for (Option_Max_i = -1; OptionList[Option_Max_i].String[0] != '.'; Option_Max_i++) // 计算选项列表长度
+    int8_t Option_Max_i = 0; // 选项列表长度
+    for (Option_Max_i = 0; OptionList[Option_Max_i].String[0] != '.'; Option_Max_i++) // 计算选项列表长度
     {
         ;
     }
+    //Option_Max_i --;
 
     while(1)
     {
@@ -144,6 +147,9 @@ void MENU_RunMenu(MENU_OptionTypeDef *OptionList)
 
       for(uint8_t i = 0; i <= CURSOR_CEILING; i++) //用于显示当前屏幕范围内所有字符的主循环
       {
+        if (Show_i + i > Option_Max_i)
+          break;
+
         uint8_t show_x = MENU_X + MENU_PADDING; 
         uint8_t show_y = MENU_Y + i * MENU_FONT_H;
         char *show_str = OptionList[Show_i + i].String;

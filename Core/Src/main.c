@@ -140,30 +140,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
     MENU_RunMainMenu();
-    
-    		
-    /*
-	  OLED_DrawBMP(0, 0, 128, 8, BMP1);
-	  HAL_Delay(100);
-	  OLED_DrawBMP(0, 0, 128, 8, BMP2);
-	  HAL_Delay(100);
-	  OLED_DrawBMP(0, 0, 128, 8, BMP3);
-	  HAL_Delay(100);
-	  OLED_DrawBMP(0, 0, 128, 8, BMP4);
-	  HAL_Delay(100);
-	  OLED_DrawBMP(0, 0, 128, 8, BMP5);
-	  HAL_Delay(100);
-	  OLED_DrawBMP(0, 0, 128, 8, BMP6);
-	  HAL_Delay(100);
-	  OLED_DrawBMP(0, 0, 128, 8, BMP7);
-	  HAL_Delay(100);
-	  OLED_DrawBMP(0, 0, 128, 8, BMP8);
-	  HAL_Delay(100);
-    */
-		//OLED_GRAMLODING();
-		//OLED_ShowString(2,4,"ABC",8);
+    /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
@@ -215,53 +193,53 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 }
+
 /* USER CODE BEGIN 4 */
 
 /**
-  * @brief  TIM定时器中断回调函数;
-  * @param  htim：中断函数发送过来的定时器地址;
+  * @brief  TIM定时器中断回调函�???;
+  * @param  htim：中断函数发送过来的定时器地�???;
   * @retval none;
   */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	/**********控制ADC采样的TIM2发生中断时**********/
+	/**********控制ADC采样的TIM2发生中断�???**********/
   if(htim == &htim2){
 		__HAL_TIM_CLEAR_IT(&htim2, TIM_IT_UPDATE);
 		HAL_ADC_Start_DMA(&hadc1,(uint32_t *)AdcBuf, ADC_BUF_LENGTH);
 
 		//OLED_ShowNum(1,4,AdcBuf_Average(AdcBuf),4,16);
 
-  /**********控制按键防抖的TIM3发生中断时**********/
+  /**********控制按键防抖的TIM3发生中断�???**********/
 	}else if(htim == &htim3){
 
 		__HAL_TIM_CLEAR_IT(&htim3, TIM_IT_UPDATE);
 		HAL_TIM_Base_Stop_IT(&htim3);
 		__HAL_TIM_SET_COUNTER(&htim3, 0);
+    Key_Keep();
 
-		printf("keyunshake_OK\n");
-	  Key_KeepPress();
   }
 }
 
 /**
-  * @brief  ADC采样计算平均值函数，求出最准确的采样电流值;
-  * @param  Adc_Buf：ADC通过DMA传输记录的数组值;
-  * @retval sample_current： 计算得出的采样电流值;
+  * @brief  ADC采样计算平均值函数，求出�???准确的采样电流�??;
+  * @param  Adc_Buf：ADC通过DMA传输记录的数组�??;
+  * @retval sample_current�??? 计算得出的采样电流�??;
   */
 uint32_t AdcBuf_Average(uint16_t* AdcBuf)
 {
   uint32_t sum = 0;
   double average = 0;
   uint16_t sample_current = 0;
-    // 计算ADC数组元素的总和
+    // 计算ADC数组元素的�?�和
     for (int i = 0; i < ADC_BUF_LENGTH; ++i) {
         sum += AdcBuf[i];
     }
-    // 计算平均值
+    // 计算平均�???
     average = sum / ADC_BUF_LENGTH;
     sample_current = (average * 165) / 205;
     //average = ((sum / ADC_BUF_LENGTH) / 4095) * 165; //165 = 3.3V / 20mR
-    //计算采样电流值
+    //计算采样电流�???
     //sample_current = (uint32_t)average;
     return sample_current;
 }
@@ -298,4 +276,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-

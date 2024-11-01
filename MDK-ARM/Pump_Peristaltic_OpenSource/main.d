@@ -38,11 +38,11 @@ pump_peristaltic_opensource\main.o: ../Core/Inc/tim.h
 pump_peristaltic_opensource\main.o: ../Core/Inc/usart.h
 pump_peristaltic_opensource\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 pump_peristaltic_opensource\main.o: ../Core/Inc/gpio.h
-pump_peristaltic_opensource\main.o: ..\Hardware\motor.h
-pump_peristaltic_opensource\main.o: ..\Hardware\OLED_SPI.h
+pump_peristaltic_opensource\main.o: ../Hardware/motor.h
+pump_peristaltic_opensource\main.o: ../Hardware/OLED_SPI.h
 pump_peristaltic_opensource\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 pump_peristaltic_opensource\main.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-pump_peristaltic_opensource\main.o: ..\Hardware\Flash_W25Q.h
-pump_peristaltic_opensource\main.o: ..\Hardware\Key.h
-pump_peristaltic_opensource\main.o: ..\Menu\menu.h
-pump_peristaltic_opensource\main.o: ..\Menu\UI.h
+pump_peristaltic_opensource\main.o: ../Hardware/Flash_W25Q.h
+pump_peristaltic_opensource\main.o: ../Hardware/Key.h
+pump_peristaltic_opensource\main.o: ../Menu/menu.h
+pump_peristaltic_opensource\main.o: ../Menu/UI.h

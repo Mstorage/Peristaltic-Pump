@@ -2,7 +2,7 @@ pump_peristaltic_opensource\menu.o: ..\Menu\menu.c
 pump_peristaltic_opensource\menu.o: ..\Menu\menu.h
 pump_peristaltic_opensource\menu.o: ..\Menu\UI.h
 pump_peristaltic_opensource\menu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-pump_peristaltic_opensource\menu.o: ..\Hardware\OLED_SPI.h
+pump_peristaltic_opensource\menu.o: ../Hardware/OLED_SPI.h
 pump_peristaltic_opensource\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 pump_peristaltic_opensource\menu.o: ../Core/Inc/stm32f1xx_hal_conf.h
 pump_peristaltic_opensource\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h
@@ -35,7 +35,7 @@ pump_peristaltic_opensource\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1x
 pump_peristaltic_opensource\menu.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 pump_peristaltic_opensource\menu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdarg.h
 pump_peristaltic_opensource\menu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
-pump_peristaltic_opensource\menu.o: ..\Hardware\Key.h
+pump_peristaltic_opensource\menu.o: ../Hardware/Key.h
 pump_peristaltic_opensource\menu.o: ../Core/Inc/main.h
 pump_peristaltic_opensource\menu.o: ../Core/Inc/tim.h
 pump_peristaltic_opensource\menu.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

@@ -33,3 +33,5 @@ pump_peristaltic_opensource\flash_w25q.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/st
 pump_peristaltic_opensource\flash_w25q.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 pump_peristaltic_opensource\flash_w25q.o: ../Core/Inc/spi.h
 pump_peristaltic_opensource\flash_w25q.o: ../Core/Inc/main.h
+pump_peristaltic_opensource\flash_w25q.o: ../BMPdata/stepmotorDirection_HexData0_31.h
+pump_peristaltic_opensource\flash_w25q.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

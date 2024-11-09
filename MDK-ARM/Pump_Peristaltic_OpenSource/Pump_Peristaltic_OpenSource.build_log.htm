@@ -22,12 +22,21 @@ Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 D:\CHZ\code\STM32\Peristaltic-Pump\MDK-ARM\Pump_Peristaltic_OpenSource.uvprojx
-Project File Date:  11/01/2024
+Project File Date:  11/09/2024
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 7 (build 960)', folder: 'D:\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Pump_Peristaltic_OpenSource'
-"Pump_Peristaltic_OpenSource\Pump_Peristaltic_OpenSource.axf" - 0 Error(s), 0 Warning(s).
+compiling UI.c...
+..\Menu\UI.c(12): warning:  #223-D: function "OLED_GRAM_UIAnimation" declared implicitly
+          OLED_GRAM_UIAnimation(BMP_MotorDirR_Adr, BMP_MotorDirR_Len);
+..\Menu\UI.c(33): warning:  #1-D: last line of file ends without a newline
+  }
+..\Menu\UI.c: 2 warnings, 0 errors
+linking...
+Program Size: Code=20800 RO-data=2536 RW-data=236 ZI-data=9044  
+FromELF: creating hex file...
+"Pump_Peristaltic_OpenSource\Pump_Peristaltic_OpenSource.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -50,7 +59,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.6.0
-Build Time Elapsed:  00:00:00
+Build Time Elapsed:  00:00:03
 </pre>
 </body>
 </html>

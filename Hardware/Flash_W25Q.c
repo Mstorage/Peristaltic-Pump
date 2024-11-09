@@ -1,6 +1,9 @@
 #include "Flash_W25Q.h"
+#include "stepmotorDirection_HexData0_31.h"
+#include <stdio.h>
 
 uint8_t W25Q128_BUFFER[4096];
+uint8_t gram_flashbuff[1024] = {0};
 
 /**
   * @brief  Flash使能函数;
@@ -10,6 +13,7 @@ uint8_t W25Q128_BUFFER[4096];
 void Flash_Write_Enabel(void){
     Flash_CS_Set();
     Flash_CS_Clr();
+	Flash_WP_Set();
 
     Flash_Write_Data(W25X_WriteEnable);
     Flash_CS_Set();
@@ -22,12 +26,11 @@ void Flash_Write_Enabel(void){
   */
 uint8_t Flash_Read_SR(void){
     uint8_t status = 0;
-    uint8_t wait_receive = 0xFF;
     Flash_CS_Set();
     Flash_CS_Clr();
 
-    Flash_Write_Data(W25X_WriteEnable);
-    status = Flash_WriteRead_Data(wait_receive);
+    Flash_WriteRead_Data(W25X_ReadStatusReg);
+    status = Flash_WriteRead_Data(WAIT_Receive);
     Flash_CS_Set();
     return status;
 }
@@ -110,6 +113,7 @@ void Flash_Erase_Sector(uint32_t Dst_Addr)
 {  
  	Dst_Addr*=4096;		//一个扇区是4096个字节
     Flash_Write_Enabel();
+
     while((Flash_Read_SR()&0x01)==0x01); //等待BUSY位清空
 
   	Flash_CS_Set();
@@ -130,6 +134,7 @@ void Flash_Erase_Sector(uint32_t Dst_Addr)
 void Flash_Erase_Chip(void)   
 {                                   
     Flash_Write_Enabel();
+	printf("%x\n",Flash_Read_SR());
     while((Flash_Read_SR()&0x01)==0x01); //等待BUSY位清空
 		
   	Flash_CS_Set();
@@ -200,9 +205,9 @@ void Flash_Write_Page(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrit
     * @param  NumByteToWrite: 要写入的数据大小(字节为单位，最大256)
     * @retval :返回写入成功标志（这一块晚点再加）
 */
-void Flash_Write_NoCheck(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)   
+uint32_t Flash_Write_NoCheck(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 { 			 		 
-	uint16_t pageremain;	
+	uint16_t pageremain;
 	
 	pageremain = 256 - WriteAddr % 256;	//当前地址下单页剩余的字节数
 	if(NumByteToWrite <= pageremain) pageremain = NumByteToWrite;//不需要换页时将要写入字节数赋值给pageremain
@@ -229,7 +234,8 @@ void Flash_Write_NoCheck(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToW
 				pageremain = NumByteToWrite;	//要写入数据字节给当页剩余字节数
 			}  	  
 		}
-	}	    
+	}
+	return WriteAddr++;	    
 }
 
 /**
@@ -239,11 +245,11 @@ void Flash_Write_NoCheck(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToW
     * @param  NumByteToWrite: 要写入的数据大小(字节为单位，最大65535)
     * @retval :返回写入成功标志（这一块晚点再加）
 */
-void Flash_Write(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)   
+uint32_t Flash_Write(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 { 
-	uint32_t secpos;
-	uint16_t secoff;
-	uint16_t secremain;	   
+	uint32_t secpos;	//当前写入数据的扇区位置，通过 WriteAddr 计算得到。
+	uint16_t secoff;	//在当前扇区内的偏移量，表示从扇区开始到写入地址的字节数。
+	uint16_t secremain;	   //当前扇区剩余的可用空间大小
  	uint16_t i;    
 	uint8_t * W25QXX_BUF;	  
    	W25QXX_BUF = W25Q128_BUFFER;	
@@ -272,7 +278,8 @@ void Flash_Write(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 		if(i < secremain)
 		{
 			/*擦除这个扇区*/
-			Flash_Erase_Sector(secpos);		
+			Flash_Erase_Sector(secpos);	
+			printf("erasing secpage\n");	
 			/*复制*/
 			for(i = 0; i < secremain; i++)	   		
 			{
@@ -283,6 +290,7 @@ void Flash_Write(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 		}
 		else
 		{	/*写已经擦除了的,直接写入扇区剩余区间*/
+			printf("writing secpage\n");
 			Flash_Write_NoCheck(pBuffer,WriteAddr,secremain);
 		}					   
 		if(NumByteToWrite == secremain)
@@ -311,6 +319,7 @@ void Flash_Write(uint8_t* pBuffer,uint32_t WriteAddr,uint16_t NumByteToWrite)
 			}		
 		}	 
 	} 
+	return WriteAddr++;
 }
 
 /**
@@ -325,11 +334,6 @@ void Get_Address_Analysis(uint32_t address)
 	uint8_t sector = (addr<<16)>>28;	//15-12位是扇区的位置
 	printf("addr:%x,block:%d,sector:%d\r\n",addr,block,sector);
 }
-
-
-
-
-
 
 /**
   * @brief  专用于向控制Flash的SPI外设发送地址信号,将24bit的数据分成3个8bit数据从高到低发送。
@@ -349,4 +353,26 @@ void Flash_SPI_SendAddress(uint32_t* Adr_Tran){
     HAL_SPI_Transmit(&hspi2, &Adr_High, 1, 0x1000);
     HAL_SPI_Transmit(&hspi2, &Adr_Medi, 1, 0x1000);
     HAL_SPI_Transmit(&hspi2, &Adr_Low, 1, 0x1000);
+}
+
+/**
+  * @brief  用于将一个指定长度的BMP序列写入Flash的指定地址（暂时只支持128*64大小，最多40张）
+  * @param  BMP1_ADR 序列第一张图片的写入地址
+  * @param  BMP_num  图片序列的图片总数
+  * @param  BMP_size_x BMP图片的长度（字节单位（8像素））
+  * @param  BMP_size_y BMP图片的宽度（像素单位）
+  * @retval none
+  */
+void Flash_Write_BMParray(uint32_t BMP1_ADR, uint8_t BMP_num, uint16_t BMP_size_x,uint16_t BMP_size_y){
+	uint16_t BMP_size = BMP_size_x * BMP_size_y;
+	for(uint16_t j = 0; j < BMP_num; j++)
+	{
+    	for(uint16_t i = 0; i < BMP_size; i++)
+    	{
+				gram_flashbuff[i] = motorDirection[j][i];
+		}
+    	printf("ready to write\n");
+    	printf("adr = %x\n",Flash_Write(gram_flashbuff, BMP1_ADR + 1024 * j, 1024));
+  	}
+	printf("write compete\n");
 }

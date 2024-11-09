@@ -25,6 +25,11 @@
         "stm32f1xx_hal_def.h": "c",
         "stm32f1xx.h": "c",
         "string.h": "c",
-        "key.h": "c"
+        "key.h": "c",
+        "flash_w25q.h": "c",
+        "ui.h": "c",
+        "menu.h": "c",
+        "bitmap_hexdata10041_10080.h": "c",
+        "stepmotordirection_hexdata0_31.h": "c"
     }
 }

@@ -1,6 +1,7 @@
 #include "OLED_SPI.h"
 #include "oledfont.h"
 #include "usart.h"
+#include "Key.h"
 
 unsigned char GRAM[SCREEN_HEIGHT / PAGE_HEIGHT][SCREEN_WIDTH] = {0};
 
@@ -19,6 +20,25 @@ void OLED_GRAMLODING(void)
 		{
             OLED_Set_Position(colume,page);
 			OLED_write_byte(GRAM[page][colume],OLED_DATA);
+		}
+	}
+}
+
+/**
+  * @brief  读取数据到显存;
+  * @retval none
+ */
+void OLED_GRAMWrite(uint8_t* grambuff)
+{
+	uint8_t page = 0;
+	uint8_t colume = 0;
+	
+	for (page = 0; page < 8; page++)
+	{
+		for (colume = 0; colume < 128; colume++)
+		{
+            GRAM[page][colume] = grambuff[page*colume + colume];
+            
 		}
 	}
 }
@@ -256,4 +276,43 @@ void OLED_GRAM_Printf(uint8_t X, uint8_t Y, uint8_t FontSize, char *format, ...)
 	vsprintf(String, format, arg);			//使用vsprintf打印格式化字符串和参数列表到字符数组中
 	va_end(arg);							//结束变量arg
 	OLED_GRAM_ShowString(X, Y, FontSize, String);//OLED显示字符数组（字符串）
+}
+
+/**
+  * @brief  从Flash指定地址读取1024字节动图数据添加到Gram并显示
+  * @param  BMP1_Adr:第一张图的Flash地址（24位）;
+  * @param	BMP_num:加载动图的参数;
+
+  * @retval none
+ */
+void OLED_GRAM_Animation(uint32_t BMP1_Adr, uint16_t BMP_num)
+{
+    for(uint16_t show_i = 0; show_i < BMP_num; show_i++){
+        if(Key_Enter_Get() == 1){return;}
+
+        Flash_Read(&GRAM[0][0], BMP1_Adr + 1024 * show_i,1024);
+        OLED_DrawBMP(0, 0,128,8,&GRAM[0][0]);
+        HAL_Delay(10);
+    }
+}
+
+/**
+  * @brief  从Flash指定地址读取任意字节大小的UI数动画据添加到Gram并显示
+  * @param  BMP1_Adr:第一张图的Flash地址（24位）;
+  * @param	BMP_num:加载动图的参数;
+
+  * @retval none
+ */
+void OLED_GRAM_UIAnimation(uint32_t BMP1_Adr, uint16_t BMP_num)
+{
+    while(1){
+        for(uint16_t show_i = 0; show_i < BMP_num; show_i++){
+            if(Key_Enter_Get() == 1){return;}
+
+            Flash_Read(&GRAM[0][0], BMP1_Adr + 1024 * show_i,1024);
+            OLED_DrawBMP(0, 0,128,8,&GRAM[0][0]);
+            HAL_Delay(10);
+        }
+    }
+    
 }

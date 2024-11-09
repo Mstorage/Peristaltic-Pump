@@ -341,7 +341,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F103xB</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Hardware;../Menu</IncludePath>
+              <IncludePath>../Core/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc;../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F1xx/Include;../Drivers/CMSIS/Include;../Hardware;../Menu;../BMPdata</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -624,6 +624,66 @@
               <FileName>UI.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\Menu\UI.h</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>BMPdata</GroupName>
+          <Files>
+            <File>
+              <FileName>bitmap_HexData10041_10080.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\bitmap_HexData10041_10080.h</FilePath>
+            </File>
+            <File>
+              <FileName>bitmap_HexData10081_10120.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\bitmap_HexData10081_10120.h</FilePath>
+            </File>
+            <File>
+              <FileName>bitmap_HexData10121_10160.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\bitmap_HexData10121_10160.h</FilePath>
+            </File>
+            <File>
+              <FileName>bitmap_HexData10161_10200.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\bitmap_HexData10161_10200.h</FilePath>
+            </File>
+            <File>
+              <FileName>bitmap_HexData10201_10240.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\bitmap_HexData10201_10240.h</FilePath>
+            </File>
+            <File>
+              <FileName>bitmap_HexData10241_10280.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\bitmap_HexData10241_10280.h</FilePath>
+            </File>
+            <File>
+              <FileName>bitmap_HexData10281_10320.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\bitmap_HexData10281_10320.h</FilePath>
+            </File>
+            <File>
+              <FileName>bitmap_HexData10321_10360.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\bitmap_HexData10321_10360.h</FilePath>
+            </File>
+            <File>
+              <FileName>bitmap_HexData10361_10400.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\bitmap_HexData10361_10400.h</FilePath>
+            </File>
+            <File>
+              <FileName>bitmap_HexData10401_10440.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\bitmap_HexData10401_10440.h</FilePath>
+            </File>
+            <File>
+              <FileName>stepmotorDirection_HexData0_31.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\BMPdata\stepmotorDirection_HexData0_31.h</FilePath>
             </File>
           </Files>
         </Group>

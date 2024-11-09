@@ -33,7 +33,9 @@
                 "${workspaceFolder}/Drivers/CMSIS/Include",
                 "${workspaceFolder}/Drivers/",
                 "${workspaceFolder}/Hardware",
-                "${workspaceFolder}/Menu"
+                "${workspaceFolder}/Menu",
+                "${workspaceFolder}/BMPdata"
+
             ],
             "defines": [
                 "USE_HAL_DRIVER",

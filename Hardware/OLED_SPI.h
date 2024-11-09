@@ -45,6 +45,7 @@ void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned 
 void OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no);
 void OLED_ShowString(uint8_t x,uint8_t y,uint8_t*chr,uint8_t Char_Size);
 
+void OLED_GRAMWrite(uint8_t* grambuff);
 void OLED_GRAMLODING(void);
 void OLED_GRAMCLEAR(void);
 void OLED_GRAM_ReversArea(uint8_t x_start, uint8_t y_start, uint8_t width, uint8_t height);
@@ -56,6 +57,8 @@ void OLED_GRAM_WritePoint(uint8_t point_x,uint8_t point_y);
 void OLED_GRAM_ShowNum(uint8_t x_start, uint8_t y_start, uint32_t Number, uint8_t Length, uint8_t FontSize, uint8_t gap);
 void OLED_GRAM_ShowString(uint8_t x_start, uint8_t y_start, uint8_t Fontsize, char *String);
 void OLED_GRAM_Printf(uint8_t X, uint8_t Y, uint8_t FontSize, char *format, ...);
+
+void OLED_GRAM_Animation(uint32_t BMP1_Adr, uint16_t BMP_num);
 
 extern unsigned char GRAM[SCREEN_HEIGHT / PAGE_HEIGHT][SCREEN_WIDTH];
 

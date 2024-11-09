@@ -276,8 +276,6 @@ void OLED_DrawBMP(unsigned char x0, unsigned char y0,unsigned char x1, unsigned 
 	}
 } 
 
-
-
 void OLED_ShowCHinese(uint8_t x,uint8_t y,uint8_t no)
 {      			    
 	uint8_t t, adder = 0;	//这个adder好像没什么卵用？

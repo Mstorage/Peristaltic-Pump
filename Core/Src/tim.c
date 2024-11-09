@@ -297,14 +297,14 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef* tim_baseHandle)
 /* USER CODE BEGIN 1 */
 /**
   * @brief  将MotorStep引脚重新设置为TIM1的PWM输出
-  * @param  PSC_Speed：生成PWM波的TIM1的预分频�?;
+  * @param  PSC_Speed：生成PWM波的TIM1的预分频�?;
   * @retval none;
   */
 void Motor_PWM_Output_Init(uint8_t PSC_Speed) {
     TIM_HandleTypeDef htim1;
     TIM_OC_InitTypeDef sConfig;
 
-    // 初始�? TIM1 时钟和配�?
+    // 初始�? TIM1 时钟和配�?
     htim1.Instance = TIM1;
     htim1.Init.Prescaler = PSC_Speed;
     htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -314,9 +314,9 @@ void Motor_PWM_Output_Init(uint8_t PSC_Speed) {
   {
     Error_Handler();
   }
-    // 配置 TIM1 CH1 通道�? PWM 模式
+    // 配置 TIM1 CH1 通道�? PWM 模式
     sConfig.OCMode = TIM_OCMODE_PWM1;
-    sConfig.Pulse = 3600; // 初始占空�? 50%
+    sConfig.Pulse = 3600; // 初始占空�? 50%
     sConfig.OCPolarity = TIM_OCPOLARITY_HIGH;
     sConfig.OCFastMode = TIM_OCFAST_DISABLE;
     HAL_TIM_PWM_ConfigChannel(&htim1, &sConfig, TIM_CHANNEL_1);
@@ -332,10 +332,10 @@ void Motor_PWM_Output_Init(uint8_t PSC_Speed) {
 void Motor_GPIO_Output_Init(void) {
     GPIO_InitTypeDef GPIO_InitStruct;
 
-    // 关闭 TIM1 �? PWM 输出
+    // 关闭 TIM1 �? PWM 输出
     HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
 
-    // 配置 PA8 为普通输出模�?
+    // 配置 PA8 为普通输出模�?
     GPIO_InitStruct.Pin = Motor_PWMstep_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

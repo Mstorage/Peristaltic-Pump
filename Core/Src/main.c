@@ -32,6 +32,8 @@
 #include "Flash_W25Q.h"
 #include "Key.h"
 #include "menu.h"
+
+#define FLASH_WRITE_OFF 80
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -46,7 +48,6 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -55,6 +56,9 @@
 unsigned int Speed = 0;
 
 uint16_t AdcBuf[ADC_BUF_LENGTH] = {0};
+uint8_t gram_buff[1024] = {0};
+uint8_t Rxbuff_test[4] = {0};
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -117,30 +121,36 @@ int main(void)
 	HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);			//启用TIM1的CH1通道来输出控制步进电机的50%占空比的PWM信号
 	HAL_ADC_Start_DMA(&hadc1,(uint32_t*)AdcBuf, ADC_BUF_LENGTH);	//启用adc1的DMA传输
 
-  //OLED_GRAM_ShowNum(10, 10, 1234, 4, FONT_SIZE_16X8, 8);
-	OLED_GRAM_Printf(30, 25, FONT_SIZE_16X8, "ABC%d", 123);
-	OLED_GRAM_Printf(0, 0, FONT_SIZE_8X6, "YHK%d", 2001);
-	//OLED_GRAM_ShowString(30, 25, "ABC", FONT_SIZE_16X8);
-	
-  for (uint8_t i = 0; i < 2; i++)
-    {
-      for(uint8_t j = 0; j < 8;j++)
-      {
-        printf("%x",GRAM[i][j]);
-      }
-    }
-    printf("\n");
-	
- 
-	//OLED_ShowNum(1,4,AdcBuf_Average(AdcBuf),4,16);
+  uint8_t page = 0;
+	uint8_t colume = 0;
+  printf("id = %x\n",Flash_Read_ID());
+  printf("SR = %x\n",Flash_Read_SR());
+  printf("\n");
+
+	OLED_ShowNum(1,4,AdcBuf_Average(AdcBuf),4,16);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  
+ //Flash_Write_BMParray(BMP_MotorDirR_Adr, BMP_MotorDirR_Len, 128, 8);
+
   while (1)
   {
+    uint8_t pBuff_test = 0;
+    HAL_UART_Receive_DMA(&huart1, Rxbuff_test, sizeof(Rxbuff_test));
+    Flash_Read(&pBuff_test, 0x0000ffff, 1);
+    printf("%x\n", pBuff_test);
+
     MENU_RunMainMenu();
+
+    for(uint16_t show_i = 0; show_i < 40; show_i++){
+      Flash_Read(gram_buff, 0x000000FF + 1024 * show_i,1024);
+      OLED_DrawBMP(0, 0,128,8,gram_buff);
+      HAL_Delay(10);
+    }
+    //MENU_RunMainMenu();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -197,20 +207,20 @@ void SystemClock_Config(void)
 /* USER CODE BEGIN 4 */
 
 /**
-  * @brief  TIM定时器中断回调函�???;
-  * @param  htim：中断函数发送过来的定时器地�???;
+  * @brief  TIM定时器中断回调函�???????;
+  * @param  htim：中断函数发送过来的定时器地�???????;
   * @retval none;
   */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	/**********控制ADC采样的TIM2发生中断�???**********/
+	/**********控制ADC采样的TIM2发生中断�???????**********/
   if(htim == &htim2){
 		__HAL_TIM_CLEAR_IT(&htim2, TIM_IT_UPDATE);
 		HAL_ADC_Start_DMA(&hadc1,(uint32_t *)AdcBuf, ADC_BUF_LENGTH);
 
 		//OLED_ShowNum(1,4,AdcBuf_Average(AdcBuf),4,16);
 
-  /**********控制按键防抖的TIM3发生中断�???**********/
+  /**********控制按键防抖的TIM3发生中断�???????**********/
 	}else if(htim == &htim3){
 
 		__HAL_TIM_CLEAR_IT(&htim3, TIM_IT_UPDATE);
@@ -222,9 +232,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 }
 
 /**
-  * @brief  ADC采样计算平均值函数，求出�???准确的采样电流�??;
+  * @brief  ADC采样计算平均值函数，求出�???????准确的采样电流�??;
   * @param  Adc_Buf：ADC通过DMA传输记录的数组�??;
-  * @retval sample_current�??? 计算得出的采样电流�??;
+  * @retval sample_current�??????? 计算得出的采样电流�??;
   */
 uint32_t AdcBuf_Average(uint16_t* AdcBuf)
 {
@@ -235,13 +245,21 @@ uint32_t AdcBuf_Average(uint16_t* AdcBuf)
     for (int i = 0; i < ADC_BUF_LENGTH; ++i) {
         sum += AdcBuf[i];
     }
-    // 计算平均�???
+    // 计算平均�???????
     average = sum / ADC_BUF_LENGTH;
     sample_current = (average * 165) / 205;
     //average = ((sum / ADC_BUF_LENGTH) / 4095) * 165; //165 = 3.3V / 20mR
-    //计算采样电流�???
+    //计算采样电流�???????
     //sample_current = (uint32_t)average;
     return sample_current;
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if(huart -> Instance == USART1){
+    uint32_t address = (Rxbuff_test[0] << 16) | (Rxbuff_test[1] << 8) | Rxbuff_test[2];
+    Flash_Write(Rxbuff_test + 3, address, 1);
+  }
 }
 /* USER CODE END 4 */
 

@@ -16,6 +16,27 @@
 
 #define CURSOR_CEILING ((MENU_HEIGHT / MENU_LINE_H) - 1) // 光标限位
 
+struct MenuProperty Menu_Global =
+{
+    .Cursor_ActSpeed = 0,	  // 当前光标速度
+    .Cursor_X = 0,    // 当前光标位置X
+	  .Cursor_Y = 0,	  // 当前光标位置Y
+	  .Cursor_W = MENU_WIDTH,		  // 当前光标尺寸宽
+	  .Cursor_H = MENU_LINE_H,		  // 当前光标尺寸高
+	  .Cursor_ActSpeed = 0.3,		  // 光标动画速度系数;
+	  .Slide_ActSpeed = 2,		  // 滚动动画速度系数;
+	  .Font_Width = MENU_FONT_W,			  // 字体宽度
+	  .Font_Height = MENU_FONT_H,		  // 字体高度
+	  .Line_Height = MENU_LINE_H,			  // 行高
+	  .Layout_Margin = 0,	  // 页边距
+
+	  .Window_X = 0,			// 窗口位置X
+    .Window_Y = 0,                // 窗口位置Y
+	  .Window_W = MENU_WIDTH,               // 窗口宽度
+	  .Window_H = MENU_HEIGHT,            // 窗口高度
+};
+
+
 /**
   * @brief  命令回调函数，汇总不同命令的具体执行
   * @param  _menu_command:
@@ -35,6 +56,7 @@ int menu_command_callback(enum _menu_command command, ...)//...为show_X,show_y,
       break;
 
     case SHOW_STRING:
+    {
       va_list args;
       va_start(args, command);
       int show_x = va_arg(args, int);
@@ -42,22 +64,20 @@ int menu_command_callback(enum _menu_command command, ...)//...为show_X,show_y,
       char *show_string = va_arg(args, char*);
       OLED_GRAM_Printf(show_x, show_y, FONT_SIZE_16X8, show_string);
       break;
+    }
+      
     
     case SHOW_CURSOR:
-    {
-        /* 提取参数列表 */
+      /* 提取参数列表 */
+      va_list args;
+      va_start(args, command);
+      int cursor_next = va_arg(args, int);
+      printf("SHOW_CURSOR = %d",cursor_next);
 
-        va_list args;
-        va_start(args, command);
-        int cursor_x = va_arg(args, int);
-        int cursor_y = va_arg(args, int);
-        int cursor_width = va_arg(args, int);
-        int cursor_height = va_arg(args, int);
-
-        /* 按需使用参数 */
-        OLED_GRAM_ReversArea(cursor_x, cursor_y, cursor_width, cursor_height);
-        break;
-    }
+      /* 按需使用参数 */
+      Menu_cursorActStep(cursor_next);
+      //OLED_GRAM_ReversArea(cursor_x, cursor_y, cursor_width, cursor_height);
+      break;
 
         /* Input */
     case GET_EVENT_ENTER:
@@ -88,6 +108,7 @@ void MENU_RunMenu(MENU_OptionTypeDef *OptionList)
 {
     int8_t Catch_i = 1;      // 选中下标默认为1,(因为OptionList[0]为"<<<")，对于当前菜单所有条目的第i条
     int8_t Cursor_i = 0;     // 光标下标默认为0, 屏幕中显示的第i条
+    int8_t Cursor_last = 0;  // 发生事件更新后的上一个光标位置
     int8_t Show_i = 0;       // 显示(遍历)起始下标
     int8_t Wheel_Event = 0;  // 记录菜单滚动事件
     int8_t Option_Max_i = 0; // 选项列表长度
@@ -118,6 +139,9 @@ void MENU_RunMenu(MENU_OptionTypeDef *OptionList)
         if (Wheel_Event)
         {
             /* 更新下标 */
+
+            Cursor_last = Cursor_i;
+
             Cursor_i += Wheel_Event;
             Catch_i += Wheel_Event;
 
@@ -156,15 +180,43 @@ void MENU_RunMenu(MENU_OptionTypeDef *OptionList)
         menu_command_callback(SHOW_STRING, show_x, show_y, show_str);
       }
       /* 显示光标 */
-        uint8_t cursor_x = MENU_X;
-        uint8_t cursor_y = MENU_Y + (Cursor_i * MENU_LINE_H);
-        uint8_t cursor_width = MENU_WIDTH;
-        uint8_t cursor_height = MENU_LINE_H;
-        menu_command_callback(SHOW_CURSOR, cursor_x, cursor_y, cursor_width, cursor_height);
-
+        uint8_t cursor_y_next = MENU_Y + (Cursor_i * MENU_LINE_H);
+        //menu_command_callback(SHOW_CURSOR, cursor_x, cursor_y_next, cursor_y_last, cursor_width, cursor_height);
+        menu_command_callback(SHOW_CURSOR, cursor_y_next);
         menu_command_callback(BUFFER_DISPLAY); // 更新缓存至显示器
     }
 
+}
+/**
+  * @brief  用于菜单条目之间选择时的动画
+  * @param  cursor_x当前光标横坐标位置;
+  * @param  cursor_i光标需要移动的下一个位置;
+  * @param  cursor_last移动前的一个位置;
+  * @param  cursor_width光标显示宽度;
+  * @param  cursor_height光标显示高度;
+  * 
+  * @retval none;
+ */
+void Menu_cursorActStep(int8_t cursor_next)
+{
+    if(Menu_Global.Cursor_Y > cursor_next)
+    {
+      printf("cursor_last=%d\n", Menu_Global.Cursor_Y);
+      uint8_t cursor_inter = ((Menu_Global.Cursor_Y - cursor_next) * Menu_Global.Cursor_ActSpeed) + 1;
+      Menu_Global.Cursor_Y -= cursor_inter;
+      OLED_GRAM_ReversArea(0, Menu_Global.Cursor_Y, Menu_Global.Cursor_W, Menu_Global.Cursor_H);
+			HAL_Delay(20);
+    }else if(Menu_Global.Cursor_Y < cursor_next)
+    {
+      printf("cursor_last=%d\n", Menu_Global.Cursor_Y);
+      uint8_t cursor_inter = ((cursor_next - Menu_Global.Cursor_Y) * Menu_Global.Cursor_ActSpeed) + 1;
+      Menu_Global.Cursor_Y += cursor_inter;
+      OLED_GRAM_ReversArea(0, Menu_Global.Cursor_Y, Menu_Global.Cursor_W, Menu_Global.Cursor_H);
+      HAL_Delay(20);
+    }else if(Menu_Global.Cursor_Y == cursor_next)
+    {
+      OLED_GRAM_ReversArea(0, Menu_Global.Cursor_Y, Menu_Global.Cursor_W, Menu_Global.Cursor_H);
+    }
 }
 /**
   * @brief  用于检测菜单光标滚动的函数
@@ -265,7 +317,7 @@ void MENU_RunAnimation(void)
     static MENU_OptionTypeDef MENU_OptionList[] = {{"<<<"},
                                                    {"Default", NULL},     // 默认动画
                                                    {"LOGO", NULL},      // logo动画
-                                                   {"BadApple", NULL}, // badapplel
+                                                   {"BadApple", UI_Animation_BadApple}, // badapplel
                                                    {".."}};
 
     MENU_RunMenu(MENU_OptionList);

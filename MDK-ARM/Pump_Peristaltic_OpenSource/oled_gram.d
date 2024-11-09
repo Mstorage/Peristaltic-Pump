@@ -37,3 +37,5 @@ pump_peristaltic_opensource\oled_gram.o: ..\Hardware\oledfont.h
 pump_peristaltic_opensource\oled_gram.o: ../Core/Inc/usart.h
 pump_peristaltic_opensource\oled_gram.o: ../Core/Inc/main.h
 pump_peristaltic_opensource\oled_gram.o: D:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
+pump_peristaltic_opensource\oled_gram.o: ..\Hardware\Key.h
+pump_peristaltic_opensource\oled_gram.o: ../Core/Inc/tim.h

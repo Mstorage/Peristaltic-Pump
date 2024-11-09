@@ -28,6 +28,25 @@ enum _menu_command
     GET_EVENT_WHEEL,     // 返回有符号整型
 };
 
+struct MenuProperty
+{
+	float Cursor_X;		  // 当前光标位置X
+	float Cursor_Y;		  // 当前光标位置Y
+	float Cursor_W;		  // 当前光标尺寸宽
+	float Cursor_H;		  // 当前光标尺寸高
+	float Cursor_ActSpeed;		  // 光标动画速度系数;
+	float Slide_ActSpeed;		  // 滚动动画速度系数;
+	int8_t Font_Width;			  // 字体宽度
+	int8_t Font_Height;			  // 字体宽度
+	int8_t Line_Height;			  // 行高
+	int8_t Layout_Margin;		  // 页边距
+
+	int8_t Window_X;				// 窗口位置X
+	int8_t Window_Y;                // 窗口位置Y
+	uint8_t Window_W;               // 窗口宽度
+	uint8_t Window_H;               // 窗口高度
+};
+
 int menu_command_callback(enum _menu_command command, ...);
 void MENU_RunMenu(MENU_OptionTypeDef *OptionList);
 
@@ -39,6 +58,9 @@ void MENU_RunMainMenu(void);
 void MENU_RunSystemSetting(void);
 void MENU_RunDisplaySetting(void);
 void MENU_RunAnimation(void);
+
+void Menu_cursorActStep(int8_t cursor_next);
+
 
 #endif
 

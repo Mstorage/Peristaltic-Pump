@@ -7,5 +7,6 @@ void UI_ManualMode(void);
 void UI_RunTimeSwitch(void);
 void UI_CurrentMonitor(void);
 void UI_Information(void);
+void UI_Animation_BadApple(void);
 
 #endif

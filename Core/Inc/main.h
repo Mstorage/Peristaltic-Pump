@@ -73,6 +73,8 @@ void Error_Handler(void);
 #define Encoder_Key_Pin GPIO_PIN_6
 #define Encoder_Key_GPIO_Port GPIOA
 #define Encoder_Key_EXTI_IRQn EXTI9_5_IRQn
+#define FLASH_WP_Pin GPIO_PIN_11
+#define FLASH_WP_GPIO_Port GPIOB
 #define FLASH_CS_Pin GPIO_PIN_12
 #define FLASH_CS_GPIO_Port GPIOB
 #define FLASH_SCK_Pin GPIO_PIN_13
